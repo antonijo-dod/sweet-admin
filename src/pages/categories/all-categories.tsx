@@ -1,19 +1,21 @@
+import React from "react";
+
 import { Fragment, ReactElement } from "react";
 import { PageHeading } from "@/components/ui";
 import Table from "@/components/Table";
 import { Link } from "react-router-dom";
 import { PlusIcon } from "@heroicons/react/20/solid";
 
-const Recipes = (): ReactElement => {
+const Categories = (): ReactElement => {
     return (
         <Fragment>
             <div className="p-8">
                 <div className="pt-8 pb-4">
                     <PageHeading
-                        title="All recipes"
+                        title="All categories"
                         action={
                             <Link
-                                to={"/recipes/new"}
+                                to={"/categories/new"}
                                 type="button"
                                 className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                             >
@@ -21,7 +23,7 @@ const Recipes = (): ReactElement => {
                                     className="-ml-1 mr-2 h-5 w-5"
                                     aria-hidden="true"
                                 />
-                                New recipe
+                                New category
                             </Link>
                         }
                     />
@@ -32,4 +34,4 @@ const Recipes = (): ReactElement => {
     );
 };
 
-export default Recipes;
+export default Categories;

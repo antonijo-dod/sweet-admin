@@ -12,7 +12,12 @@ import {
 
 const navigation = [
     { name: "Recipes", href: "/", icon: HomeIcon, current: true },
-    { name: "Categories", href: "#", icon: FolderIcon, current: false },
+    {
+        name: "Categories",
+        href: "/categories",
+        icon: FolderIcon,
+        current: false,
+    },
     { name: "Settings", href: "#", icon: UsersIcon, current: false },
 ];
 const userNavigation = [

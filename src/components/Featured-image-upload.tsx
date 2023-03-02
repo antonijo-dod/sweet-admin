@@ -28,7 +28,7 @@ const IMAGES = [
 
 type TFeatureImageProps = {
     value: { id: number; url: string }[];
-    onChange: (event: { id: number; url: string }[] | []) => void;
+    onChange: (event: number[]) => void;
 };
 const FeaturedImageUpload = ({
     onChange,
@@ -57,7 +57,7 @@ const FeaturedImageUpload = ({
     };
 
     useEffect(() => {
-        onChange(selectedImage);
+        onChange(selectedImage.map((image) => image.id));
     }, [selectedImage, onChange]);
 
     return (
@@ -102,7 +102,10 @@ const FeaturedImageUpload = ({
                 </div>
                 <ul className="mt-4 grid gap-y-6 grid-cols-12 sm:gap-x-4 w-full">
                     {selectedImage.map((image) => (
-                        <li className="relative bg-red-400 col-span-1">
+                        <li
+                            key={image.id}
+                            className="relative bg-red-400 col-span-1"
+                        >
                             <div className="group block w-full aspect-w-10 aspect-h-7 rounded-lg bg-gray-100 overflow-hidden">
                                 <img
                                     src={image.url}

@@ -1,15 +1,14 @@
 import { ReactElement, useState } from "react";
 import { FeaturedImageUpload, SingleUploadImage } from "@/components";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
+import Select from "react-select";
+import { useGetIngredients, useCreateIngredient } from "@/hooks/ingredients";
+import AsyncCreatableSelect from "react-select/async-creatable";
 
 type TFormValues = {
     title: string;
-    featuredImageId?: number;
-    gallery_images: {
-        id: number;
-        url: string;
-    }[];
-    ingredients: { name: string; amount: string }[];
+    gallery_images: number[];
+    ingredients: { ingredientId: number; amount: string }[];
 };
 
 type TRecipeFormProps = {
@@ -21,6 +20,14 @@ const RecipeForm = ({
     onFormSubmit,
     defaultData,
 }: TRecipeFormProps): ReactElement => {
+    const [searchIngredients, setSearchIngredients] = useState<string>("");
+    const [transformedIngredients, setTransformedIngredients] = useState<any>(
+        []
+    );
+
+    const ingredients = useGetIngredients({ search: searchIngredients });
+    const createIngredient = useCreateIngredient();
+
     const {
         handleSubmit,
         control,
@@ -42,6 +49,45 @@ const RecipeForm = ({
     const onSubmit = (data: TFormValues) => {
         onFormSubmit(data);
     };
+
+    const convertIngredientsForSelect = () => {
+        const ingredientsData = ingredients.data?.data.map((ingredient) => {
+            return {
+                value: ingredient.id,
+                label: ingredient.name,
+                id: ingredient.id,
+            };
+        });
+
+        return ingredientsData;
+    };
+
+    let hello = convertIngredientsForSelect();
+
+    console.log(
+        "🚀 ~ file: RecipeForm.tsx:61 ~ convertIngredientsForSelect ~ ingredientsData:",
+        hello
+    );
+
+    const handleCreateIngredient = async (name: string) => {
+        await createIngredient.mutate(
+            { name },
+            {
+                onSuccess: (data) => {
+                    console.log(
+                        "🚀 ~ file: RecipeForm.tsx:72 ~ await createIngredient.mutate ~ data:",
+                        data
+                    );
+                },
+            }
+        );
+    };
+
+    const handleLoadOptions = async (inputValue: string) => {
+        setSearchIngredients(inputValue);
+        return convertIngredientsForSelect();
+    };
+
     return (
         <form
             onSubmit={handleSubmit(onSubmit)}
@@ -250,16 +296,49 @@ const RecipeForm = ({
                                     Name
                                 </label>
                                 <div className="mt-1">
-                                    <input
-                                        id={field.id}
-                                        type="text"
-                                        className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                        {...register(
-                                            `ingredients.${index}.name` as const,
-                                            {
-                                                required: "This is required",
-                                            }
-                                        )}
+                                    <Controller
+                                        control={control}
+                                        name={
+                                            `ingredients.${index}.ingredientId` as const
+                                        }
+                                        render={({
+                                            field: {
+                                                onChange,
+                                                value,
+                                                ref,
+                                                name,
+                                            },
+                                        }) => {
+                                            console.log(
+                                                "🚀 ~ file: RecipeForm.tsx:297 ~ value:",
+                                                value
+                                            );
+
+                                            return (
+                                                <AsyncCreatableSelect
+                                                    ref={ref}
+                                                    cacheOptions
+                                                    defaultValue={{
+                                                        label: value,
+                                                    }}
+                                                    isLoading={
+                                                        ingredients.isLoading
+                                                    }
+                                                    loadOptions={(e) =>
+                                                        handleLoadOptions(e)
+                                                    }
+                                                    defaultOptions={convertIngredientsForSelect()}
+                                                    onCreateOption={(e) =>
+                                                        handleCreateIngredient(
+                                                            e
+                                                        )
+                                                    }
+                                                    onChange={(val) =>
+                                                        onChange(val.value)
+                                                    }
+                                                />
+                                            );
+                                        }}
                                     />
                                 </div>
                             </div>
@@ -299,9 +378,10 @@ const RecipeForm = ({
                     <div className="mt-8">
                         <button
                             className="p-2 bg-blue-500"
+                            type="button"
                             onClick={() => {
                                 ingredientsAppend({
-                                    name: "",
+                                    ingredientId: 0,
                                     amount: "",
                                 });
                             }}

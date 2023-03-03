@@ -1,4 +1,4 @@
-import { ReactElement, useState } from "react";
+import { ReactElement, useState, useEffect } from "react";
 import { FeaturedImageUpload, SingleUploadImage } from "@/components";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import Select from "react-select";
@@ -21,9 +21,6 @@ const RecipeForm = ({
     defaultData,
 }: TRecipeFormProps): ReactElement => {
     const [searchIngredients, setSearchIngredients] = useState<string>("");
-    const [transformedIngredients, setTransformedIngredients] = useState<any>(
-        []
-    );
 
     const ingredients = useGetIngredients({ search: searchIngredients });
     const createIngredient = useCreateIngredient();
@@ -61,13 +58,6 @@ const RecipeForm = ({
 
         return ingredientsData;
     };
-
-    let hello = convertIngredientsForSelect();
-
-    console.log(
-        "🚀 ~ file: RecipeForm.tsx:61 ~ convertIngredientsForSelect ~ ingredientsData:",
-        hello
-    );
 
     const handleCreateIngredient = async (name: string) => {
         await createIngredient.mutate(
@@ -283,98 +273,107 @@ const RecipeForm = ({
                         </p>
                     </div>
                     {/* ROW */}
-                    {ingredientsFields.map((field, index) => (
-                        <div
-                            className="mt-6 grid grid-cols-12 gap-y-6 gap-x-4 sm:grid-cols-6"
-                            key={field.id}
-                        >
-                            <div>
-                                <label
-                                    htmlFor="title"
-                                    className="block text-sm font-medium text-gray-700"
-                                >
-                                    Name
-                                </label>
-                                <div className="mt-1">
-                                    <Controller
-                                        control={control}
-                                        name={
-                                            `ingredients.${index}.ingredientId` as const
-                                        }
-                                        render={({
-                                            field: {
-                                                onChange,
-                                                value,
-                                                ref,
-                                                name,
-                                            },
-                                        }) => {
-                                            console.log(
-                                                "🚀 ~ file: RecipeForm.tsx:297 ~ value:",
-                                                value
-                                            );
 
-                                            return (
-                                                <AsyncCreatableSelect
-                                                    ref={ref}
-                                                    cacheOptions
-                                                    defaultValue={{
-                                                        label: value,
-                                                    }}
-                                                    isLoading={
-                                                        ingredients.isLoading
-                                                    }
-                                                    loadOptions={(e) =>
-                                                        handleLoadOptions(e)
-                                                    }
-                                                    defaultOptions={convertIngredientsForSelect()}
-                                                    onCreateOption={(e) =>
-                                                        handleCreateIngredient(
-                                                            e
-                                                        )
-                                                    }
-                                                    onChange={(val) =>
-                                                        onChange(val.value)
-                                                    }
-                                                />
-                                            );
-                                        }}
-                                    />
-                                </div>
-                            </div>
-                            <div>
-                                <label
-                                    htmlFor="amount"
-                                    className="block text-sm font-medium text-gray-700"
-                                >
-                                    Amount
-                                </label>
-                                <div className="mt-1">
-                                    <input
-                                        type="text"
-                                        id="amount"
-                                        className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                        {...register(
-                                            `ingredients.${index}.amount` as const,
-                                            {
-                                                required: "This is required",
-                                            }
-                                        )}
-                                    />
-                                </div>
-                            </div>
-                            <div className="mt-8">
-                                <button
-                                    className="p-2 bg-blue-500"
-                                    onClick={() => {
-                                        ingredientsRemove(index);
-                                    }}
-                                >
-                                    Remove
-                                </button>
-                            </div>
-                        </div>
-                    ))}
+                    {!ingredients.isLoading && ingredients.data
+                        ? ingredientsFields.map((field, index) => (
+                              <div
+                                  className="mt-6 grid grid-cols-12 gap-y-6 gap-x-4 sm:grid-cols-6"
+                                  key={field.id}
+                              >
+                                  <div>
+                                      <label
+                                          htmlFor="title"
+                                          className="block text-sm font-medium text-gray-700"
+                                      >
+                                          Name
+                                      </label>
+                                      <div className="mt-1">
+                                          <Controller
+                                              control={control}
+                                              name={
+                                                  `ingredients.${index}.ingredientId` as const
+                                              }
+                                              render={({
+                                                  field: {
+                                                      onChange,
+                                                      value,
+                                                      ref,
+                                                  },
+                                              }) => {
+                                                  return (
+                                                      <AsyncCreatableSelect
+                                                          ref={ref}
+                                                          cacheOptions
+                                                          defaultValue={{
+                                                              value: value,
+                                                              label: ingredients.data.data.find(
+                                                                  (
+                                                                      ingredient
+                                                                  ) =>
+                                                                      ingredient.id ===
+                                                                      value
+                                                              )?.name,
+                                                          }}
+                                                          isLoading={
+                                                              ingredients.isLoading
+                                                          }
+                                                          loadOptions={(e) =>
+                                                              handleLoadOptions(
+                                                                  e
+                                                              )
+                                                          }
+                                                          defaultOptions={convertIngredientsForSelect()}
+                                                          onCreateOption={(e) =>
+                                                              handleCreateIngredient(
+                                                                  e
+                                                              )
+                                                          }
+                                                          onChange={(val) =>
+                                                              onChange(
+                                                                  val.value
+                                                              )
+                                                          }
+                                                      />
+                                                  );
+                                              }}
+                                          />
+                                      </div>
+                                  </div>
+                                  <div>
+                                      <label
+                                          htmlFor="amount"
+                                          className="block text-sm font-medium text-gray-700"
+                                      >
+                                          Amount
+                                      </label>
+                                      <div className="mt-1">
+                                          <input
+                                              type="text"
+                                              id="amount"
+                                              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                              {...register(
+                                                  `ingredients.${index}.amount` as const,
+                                                  {
+                                                      required:
+                                                          "This is required",
+                                                  }
+                                              )}
+                                          />
+                                      </div>
+                                  </div>
+                                  <div className="mt-8">
+                                      <button
+                                          className="p-2 bg-blue-500"
+                                          onClick={() => {
+                                              ingredientsRemove(index);
+                                          }}
+                                      >
+                                          Remove
+                                      </button>
+                                  </div>
+                              </div>
+                          ))
+                        : "Loading..."}
                     <div className="mt-8">
                         <button
                             className="p-2 bg-blue-500"

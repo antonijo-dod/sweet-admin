@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import qs from 'qs'
+import { sweetServer } from '@/api/config'
 
 type GetIngredientsParams = {
     search?: string
@@ -18,8 +19,8 @@ export const useGetIngredients = ({ search }) => {
             }
         );
 
-        const response = await fetch(`http://localhost:5000/ingredients?${query}`)
-        return response.json()
+        const response = await sweetServer.get(`/ingredients?${query}`)
+        return response.data
     }
 
     const ingredients = useQuery(['ingredients', search], async () => await getIngredients(search), { keepPreviousData: true })

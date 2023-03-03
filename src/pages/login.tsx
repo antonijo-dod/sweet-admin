@@ -1,7 +1,8 @@
 import React from "react";
+import { LoginForm } from "@/containers";
 
 const Login = () => {
-    return <div>Login</div>;
+    return <LoginForm />;
 };
 
 export default Login;

@@ -1,105 +1,17 @@
-import React, { ReactElement, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useGetRecipes } from "@/hooks/recipes";
-import { Pagination } from "@/components/elements";
+import { ReactElement } from "react";
 
-import {
-    ColumnDef,
-    flexRender,
-    getCoreRowModel,
-    getSortedRowModel,
-    useReactTable,
-    getPaginationRowModel,
-} from "@tanstack/react-table";
+import { flexRender } from "@tanstack/react-table";
 
-import {
-    ChevronDoubleLeftIcon,
-    ChevronLeftIcon,
-    ChevronRightIcon,
-    ChevronDoubleRightIcon,
-} from "@heroicons/react/24/outline";
-
-export type TRecipe = {
-    thumbnail: string;
-    id: number;
-    title: string;
-    slug: string;
-    createdAt: Date;
-    isFeatured: boolean;
+type TTableLayoutProps = {
+    table: any;
 };
 
-const AvatarCell = ({
-    value,
-    column,
-    row,
-}: {
-    value: string;
-    column: ColumnDef<TRecipe>;
-    row: any;
-}) => {
+const TableLayout = ({ table }: TTableLayoutProps): ReactElement => {
     return (
-        <div className="flex-shrink-0 h-10 w-10">
-            <img className="h-10 w-10" src={row.original.thumbnail} alt="#" />
-        </div>
-    );
-};
-
-const Table = (): ReactElement => {
-    const [sorting, setSorting] = React.useState([]);
-    const [page, setPage] = useState<number>(1);
-    const navigate = useNavigate();
-
-    const recipes = useGetRecipes({ page });
-
-    const handleRowClick = (row: any) => {
-        navigate(`/recipes/${row.id}/edit`);
-    };
-
-    const columns = React.useMemo<ColumnDef<TRecipe>[]>(
-        () => [
-            {
-                accessorKey: "thumbnail",
-                header: "Image",
-                className: "bg-red-500",
-                cell: AvatarCell,
-            },
-            {
-                accessorKey: "id",
-                header: "Id",
-                className: "text-blue-500",
-            },
-            {
-                accessorKey: "name",
-                header: "Name",
-                className: "bg-red-500",
-            },
-            {
-                accessorKey: "isFeatured",
-                header: "Is Featured",
-            },
-        ],
-        []
-    );
-
-    const table = useReactTable({
-        data: recipes.data?.data || [],
-        columns,
-        state: {
-            sorting,
-        },
-        onSortingChange: setSorting,
-        getCoreRowModel: getCoreRowModel(),
-        getSortedRowModel: getSortedRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-        debugTable: true,
-    });
-
-    if (recipes.isLoading) return <>Loading</>;
-
-    return (
-        <div>
-            <table className="min-w-full divide-y divide-gray-300">
-                <thead className="bg-gray-50">
+        <div className="overflow-x-auto w-full">
+            <table className="table w-full">
+                {/* head */}
+                <thead>
                     {table.getHeaderGroups().map((headerGroup) => (
                         <tr key={headerGroup.id}>
                             {headerGroup.headers.map((header) => {
@@ -108,7 +20,6 @@ const Table = (): ReactElement => {
                                         key={header.id}
                                         colSpan={header.colSpan}
                                         scope="col"
-                                        className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                                     >
                                         {header.isPlaceholder ? null : (
                                             <div
@@ -140,7 +51,7 @@ const Table = (): ReactElement => {
                         </tr>
                     ))}
                 </thead>
-                <tbody className="divide-y divide-gray-200 bg-white">
+                <tbody>
                     {table
                         .getRowModel()
                         .rows.slice(0, 10)
@@ -148,7 +59,7 @@ const Table = (): ReactElement => {
                             return (
                                 <tr
                                     key={row.id}
-                                    onClick={() => handleRowClick(row)}
+                                    //onClick={() => handleRowClick(row)}
                                 >
                                     {row.getVisibleCells().map((cell) => {
                                         return (
@@ -169,14 +80,8 @@ const Table = (): ReactElement => {
                         })}
                 </tbody>
             </table>
-            <div>
-                <Pagination
-                    onPageChange={(e) => setPage(e)}
-                    pageCount={recipes.data.meta.totalPages}
-                />
-            </div>
         </div>
     );
 };
 
-export default Table;
+export default TableLayout;

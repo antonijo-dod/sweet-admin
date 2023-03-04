@@ -1,6 +1,6 @@
 import { Fragment, ReactElement } from "react";
 import { PageHeading } from "@/components/ui";
-import Table from "@/components/Table";
+import { RecipeTableContainer } from "@/containers";
 import { Link } from "react-router-dom";
 import { PlusIcon } from "@heroicons/react/20/solid";
 
@@ -26,7 +26,7 @@ const Recipes = (): ReactElement => {
                         }
                     />
                 </div>
-                <Table />
+                <RecipeTableContainer />
             </div>
         </Fragment>
     );

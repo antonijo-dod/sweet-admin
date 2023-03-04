@@ -1,14 +1,12 @@
 import React from "react";
 import { RecipeForm } from "@/components";
+import { useCreateRecipe } from "@/hooks/recipes";
 
 const NewRecipeContainer = () => {
-    // Send data to API - here sent to POST /recipes
+    const createRecipe = useCreateRecipe();
 
-    const handleOnFormSubmit = (values: any) => {
-        console.log(
-            "🚀 ~ file: NewRecipeForm.tsx:7 ~ NewRecipeContainer ~ values",
-            values
-        );
+    const handleOnFormSubmit = async (values: any) => {
+        await createRecipe.mutate(values);
     };
 
     return <RecipeForm onFormSubmit={(e) => handleOnFormSubmit(e)} />;

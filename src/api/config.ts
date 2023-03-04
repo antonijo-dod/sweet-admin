@@ -7,11 +7,11 @@ export const sweetServer = axios.create({
 sweetServer.interceptors.request.use(
     (config) => {
 
-        const { jwt } = JSON.parse(localStorage.getItem("user")!);
+        const user = JSON.parse(localStorage.getItem("user")!);
 
-        if (jwt) {
+        if (user) {
             config.headers['Content-Type'] = 'application/json'
-            config.headers.Authorization = `Bearer ${jwt}`
+            config.headers.Authorization = `Bearer ${user.jwt}`
         }
 
         return config

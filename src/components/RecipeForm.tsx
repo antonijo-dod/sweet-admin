@@ -6,9 +6,12 @@ import { useGetIngredients, useCreateIngredient } from "@/hooks/ingredients";
 import AsyncCreatableSelect from "react-select/async-creatable";
 
 type TFormValues = {
-    title: string;
-    gallery_images: number[];
-    ingredients: { ingredientId: number; amount: string }[];
+    name: string;
+    slug: string;
+    description: string;
+    categories: number[];
+    galleryImages: number[];
+    ingredients: { id: number; amount: string }[];
 };
 
 type TRecipeFormProps = {
@@ -44,6 +47,7 @@ const RecipeForm = ({
     });
 
     const onSubmit = (data: TFormValues) => {
+        console.log("🚀 ~ file: RecipeForm.tsx:50 ~ onSubmit ~ data:", data);
         onFormSubmit(data);
     };
 
@@ -78,6 +82,11 @@ const RecipeForm = ({
         return convertIngredientsForSelect();
     };
 
+    const categoryOptions = [
+        { value: "1", label: "Breakfast" },
+        { value: "2", label: "Nesto drugo" },
+    ];
+
     return (
         <form
             onSubmit={handleSubmit(onSubmit)}
@@ -107,7 +116,7 @@ const RecipeForm = ({
                                     type="text"
                                     id="title"
                                     className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    {...register("title", {
+                                    {...register("name", {
                                         required: "Naziv recepta je obavezan",
                                     })}
                                 />
@@ -124,9 +133,11 @@ const RecipeForm = ({
                             <div className="mt-1">
                                 <input
                                     type="text"
-                                    name="slug"
                                     id="slug"
                                     className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    {...register("slug", {
+                                        required: "Naziv recepta je obavezan",
+                                    })}
                                 />
                             </div>
                         </div>
@@ -141,10 +152,11 @@ const RecipeForm = ({
                             <div className="mt-1">
                                 <textarea
                                     id="description"
-                                    name="description"
                                     rows={3}
                                     className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    defaultValue={""}
+                                    {...register("description", {
+                                        required: "Naziv recepta je obavezan",
+                                    })}
                                 />
                             </div>
                             <p className="mt-2 text-sm text-gray-500">
@@ -160,16 +172,27 @@ const RecipeForm = ({
                                 Categories
                             </label>
                             <div className="mt-1">
-                                <select
-                                    id="categories"
+                                <Controller
+                                    control={control}
                                     name="categories"
-                                    autoComplete="categories"
-                                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                >
-                                    <option>United States</option>
-                                    <option>Canada</option>
-                                    <option>Mexico</option>
-                                </select>
+                                    render={({
+                                        field: { onChange, value, name, ref },
+                                    }) => (
+                                        <Select
+                                            isMulti
+                                            name="colors"
+                                            ref={ref}
+                                            options={categoryOptions}
+                                            onChange={(val) =>
+                                                onChange(
+                                                    val.map((v) =>
+                                                        Number(v.value)
+                                                    )
+                                                )
+                                            }
+                                        />
+                                    )}
+                                />
                             </div>
                         </div>
 
@@ -251,7 +274,7 @@ const RecipeForm = ({
                                 Gallery images
                             </label>
                             <Controller
-                                name="gallery_images"
+                                name="galleryImages"
                                 control={control}
                                 rules={{
                                     required: "Odaberi slike",
@@ -291,7 +314,7 @@ const RecipeForm = ({
                                           <Controller
                                               control={control}
                                               name={
-                                                  `ingredients.${index}.ingredientId` as const
+                                                  `ingredients.${index}.id` as const
                                               }
                                               render={({
                                                   field: {
@@ -380,7 +403,7 @@ const RecipeForm = ({
                             type="button"
                             onClick={() => {
                                 ingredientsAppend({
-                                    ingredientId: 0,
+                                    id: 0,
                                     amount: "",
                                 });
                             }}

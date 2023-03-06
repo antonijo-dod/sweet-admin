@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from "react";
+import jwtDecode from "jwt-decode";
 
 const AuthContext = createContext({
     user: null,
@@ -11,9 +12,14 @@ const AuthContextProvider = ({ children }) => {
 
     useEffect(() => {
         const userInLocalStorage = JSON.parse(localStorage.getItem("user")!);
-
         if (userInLocalStorage) {
             setUser(userInLocalStorage);
+            if (userInLocalStorage.jwt) {
+                const { exp } = jwtDecode(userInLocalStorage.jwt);
+                if (exp * 1000 < Date.now()) {
+                    localStorage.removeItem("user");
+                }
+            }
         }
         setIsLoading(false);
     }, []);

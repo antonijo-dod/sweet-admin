@@ -6,7 +6,7 @@ import { NewRecipeForm } from "@/containers";
 const NewRecipe = (): ReactElement => {
     return (
         <Fragment>
-            <div className="py-8 px-8">
+            <div className="p-8 ml-8 mr-8 my-8 bg-white">
                 <PageHeading
                     title="Create recipe"
                     action={

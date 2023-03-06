@@ -38,10 +38,10 @@ const SelectImage = () => {
                                 className="sr-only"
                             />
                         </label>
-                        <p className="pl-1">or drag and drop</p>
+                        <p className="pl-1">or drag and drosp</p>
                     </div>
                     <p className="text-xs text-gray-500">
-                        PNG, JPG, GIF up to 10MB
+                        PNG, JPG, GIF up to 10MBs
                     </p>
                 </div>
             </div>

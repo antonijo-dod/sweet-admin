@@ -1,5 +1,6 @@
 import { ReactElement, useState, useEffect } from "react";
-import { FeaturedImageUpload, SingleUploadImage } from "@/components";
+import { MultipleUploadImage, SingleUploadImage } from "@/components";
+import { TextInput, TextArea } from "@/components/elements";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import Select from "react-select";
 import { useGetIngredients, useCreateIngredient } from "@/hooks/ingredients";
@@ -11,6 +12,9 @@ type TFormValues = {
     description: string;
     categories: number[];
     galleryImages: number[];
+    preparingTime: number;
+    cookingTime: number;
+    portions: number;
     ingredients: { id: number; amount: string }[];
 };
 
@@ -32,6 +36,7 @@ const RecipeForm = ({
         handleSubmit,
         control,
         register,
+        reset,
         formState: { errors, isSubmitting },
     } = useForm<TFormValues>({
         defaultValues: defaultData,
@@ -47,8 +52,12 @@ const RecipeForm = ({
     });
 
     const onSubmit = (data: TFormValues) => {
-        console.log("🚀 ~ file: RecipeForm.tsx:50 ~ onSubmit ~ data:", data);
-        onFormSubmit(data);
+        onFormSubmit({
+            ...data,
+            preparingTime: Number(data.preparingTime),
+            cookingTime: Number(data.cookingTime),
+            portions: Number(data.portions),
+        });
     };
 
     const convertIngredientsForSelect = () => {
@@ -104,169 +113,208 @@ const RecipeForm = ({
                     </div>
 
                     <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-                        <div className="sm:col-span-3">
-                            <label
-                                htmlFor="title"
-                                className="block text-sm font-medium text-gray-700"
-                            >
-                                Title
-                            </label>
-                            <div className="mt-1">
-                                <input
-                                    type="text"
-                                    id="title"
-                                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    {...register("name", {
-                                        required: "Naziv recepta je obavezan",
-                                    })}
-                                />
-                            </div>
+                        <div className="col-span-12 sm:col-span-3">
+                            <Controller
+                                name="name"
+                                control={control}
+                                rules={{ required: "Name required" }}
+                                render={({
+                                    field: { onChange, value },
+                                    fieldState: { error },
+                                }) => (
+                                    <TextInput
+                                        label="Name"
+                                        placeholder="Input recipe name"
+                                        value={value}
+                                        onChange={onChange}
+                                        error={!!error}
+                                        helperText={
+                                            error ? error.message : null
+                                        }
+                                    />
+                                )}
+                            />
                         </div>
 
-                        <div className="sm:col-span-3">
-                            <label
-                                htmlFor="slug"
-                                className="block text-sm font-medium text-gray-700"
-                            >
-                                Slug
-                            </label>
-                            <div className="mt-1">
-                                <input
-                                    type="text"
-                                    id="slug"
-                                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    {...register("slug", {
-                                        required: "Naziv recepta je obavezan",
-                                    })}
-                                />
-                            </div>
+                        <div className="col-span-12 sm:col-span-3">
+                            <Controller
+                                name="slug"
+                                control={control}
+                                rules={{ required: "Slug required" }}
+                                render={({
+                                    field: { onChange, value },
+                                    fieldState: { error },
+                                }) => (
+                                    <TextInput
+                                        label="Slug"
+                                        placeholder="Input slug"
+                                        value={value}
+                                        onChange={onChange}
+                                        error={!!error}
+                                        helperText={
+                                            error ? error.message : null
+                                        }
+                                    />
+                                )}
+                            />
                         </div>
 
-                        <div className="sm:col-span-6">
-                            <label
-                                htmlFor="description"
-                                className="block text-sm font-medium text-gray-700"
-                            >
-                                Description
-                            </label>
-                            <div className="mt-1">
-                                <textarea
-                                    id="description"
-                                    rows={3}
-                                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    {...register("description", {
-                                        required: "Naziv recepta je obavezan",
-                                    })}
-                                />
-                            </div>
-                            <p className="mt-2 text-sm text-gray-500">
-                                Write a few sentences about recipe.
-                            </p>
+                        <div className="col-span-12 sm:col-span-6">
+                            <Controller
+                                name="description"
+                                control={control}
+                                rules={{ required: "Description required" }}
+                                render={({
+                                    field: { onChange, value },
+                                    fieldState: { error },
+                                }) => (
+                                    <TextArea
+                                        label="Description"
+                                        placeholder="Input description"
+                                        value={value}
+                                        onChange={onChange}
+                                        error={!!error}
+                                        helperText={
+                                            error ? error.message : null
+                                        }
+                                    />
+                                )}
+                            />
                         </div>
 
-                        <div className="sm:col-span-2">
-                            <label
-                                htmlFor="categories"
-                                className="block text-sm font-medium text-gray-700"
-                            >
-                                Categories
-                            </label>
-                            <div className="mt-1">
-                                <Controller
-                                    control={control}
-                                    name="categories"
-                                    render={({
-                                        field: { onChange, value, name, ref },
-                                    }) => (
-                                        <Select
-                                            isMulti
-                                            name="colors"
-                                            ref={ref}
-                                            options={categoryOptions}
-                                            onChange={(val) =>
-                                                onChange(
-                                                    val.map((v) =>
-                                                        Number(v.value)
+                        <div className="col-span-12 sm:col-span-6">
+                            <div>
+                                <label
+                                    htmlFor="categories"
+                                    className="block text-sm font-medium text-gray-700"
+                                >
+                                    Categories
+                                </label>
+                                <div className="mt-1">
+                                    <Controller
+                                        control={control}
+                                        name="categories"
+                                        render={({
+                                            field: {
+                                                onChange,
+                                                value,
+                                                name,
+                                                ref,
+                                            },
+                                        }) => (
+                                            <Select
+                                                isMulti
+                                                name="colors"
+                                                ref={ref}
+                                                options={categoryOptions}
+                                                onChange={(val) =>
+                                                    onChange(
+                                                        val.map((v) =>
+                                                            Number(v.value)
+                                                        )
                                                     )
-                                                )
-                                            }
-                                        />
+                                                }
+                                            />
+                                        )}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="col-span-12 sm:col-span-2">
+                            <Controller
+                                name="preparingTime"
+                                control={control}
+                                rules={{ required: "Preparing time required" }}
+                                render={({
+                                    field: { onChange, value },
+                                    fieldState: { error },
+                                }) => (
+                                    <TextInput
+                                        label="Preparing time"
+                                        placeholder="Input preparing time"
+                                        value={value}
+                                        type="number"
+                                        onChange={onChange}
+                                        error={!!error}
+                                        helperText={
+                                            error ? error.message : null
+                                        }
+                                    />
+                                )}
+                            />
+                        </div>
+
+                        <div className="col-span-12 sm:col-span-2">
+                            <Controller
+                                name="cookingTime"
+                                control={control}
+                                rules={{ required: "Cooking time required" }}
+                                render={({
+                                    field: { onChange, value },
+                                    fieldState: { error },
+                                }) => (
+                                    <TextInput
+                                        label="Cooking time"
+                                        placeholder="Input cooking time"
+                                        value={value}
+                                        type="number"
+                                        onChange={onChange}
+                                        error={!!error}
+                                        helperText={
+                                            error ? error.message : null
+                                        }
+                                    />
+                                )}
+                            />
+                        </div>
+
+                        <div className="col-span-12 sm:col-span-2">
+                            <Controller
+                                name="portions"
+                                control={control}
+                                rules={{ required: "Portion number required" }}
+                                render={({
+                                    field: { onChange, value },
+                                    fieldState: { error },
+                                }) => (
+                                    <TextInput
+                                        label="Portions"
+                                        placeholder="Input portion number"
+                                        value={value}
+                                        type="number"
+                                        onChange={onChange}
+                                        error={!!error}
+                                        helperText={
+                                            error ? error.message : null
+                                        }
+                                    />
+                                )}
+                            />
+                        </div>
+
+                        <div className="col-span-12 sm:col-span-6">
+                            <div className="max-w-sm">
+                                <label
+                                    htmlFor="featured-image"
+                                    className="block text-sm font-medium text-gray-700 mb-2"
+                                >
+                                    Featured image
+                                </label>
+                                <Controller
+                                    name="featuredImageId"
+                                    control={control}
+                                    rules={{
+                                        required: "Odaberi sliku",
+                                    }}
+                                    render={({ field: { ref, ...rest } }) => (
+                                        <SingleUploadImage {...rest} />
                                     )}
                                 />
                             </div>
                         </div>
 
-                        <div className="sm:col-span-2">
-                            <label
-                                htmlFor="preparing_time"
-                                className="block text-sm font-medium text-gray-700"
-                            >
-                                Preparing time
-                            </label>
-                            <div className="mt-1">
-                                <input
-                                    type="number"
-                                    name="prep"
-                                    id="prep"
-                                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="sm:col-span-2">
-                            <label
-                                htmlFor="cook_time"
-                                className="block text-sm font-medium text-gray-700"
-                            >
-                                Cook time
-                            </label>
-                            <div className="mt-1">
-                                <input
-                                    type="number"
-                                    name="cook_time"
-                                    id="cook_time"
-                                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="sm:col-span-2">
-                            <label
-                                htmlFor="portions"
-                                className="block text-sm font-medium text-gray-700"
-                            >
-                                Portions
-                            </label>
-                            <div className="mt-1">
-                                <input
-                                    type="number"
-                                    name="portions"
-                                    id="portions"
-                                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="col-span-6">
-                            <label
-                                htmlFor="featured-image"
-                                className="block text-sm font-medium text-gray-700"
-                            >
-                                Featured image
-                            </label>
-                            <Controller
-                                name="featuredImageId"
-                                control={control}
-                                rules={{
-                                    required: "Odaberi sliku",
-                                }}
-                                render={({ field: { ref, ...rest } }) => (
-                                    <SingleUploadImage {...rest} />
-                                )}
-                            />
-                        </div>
-
-                        <div className="col-span-6">
+                        <div className="col-span-12 sm:col-span-6">
                             <label
                                 htmlFor="featured-image"
                                 className="block text-sm font-medium text-gray-700"
@@ -280,7 +328,7 @@ const RecipeForm = ({
                                     required: "Odaberi slike",
                                 }}
                                 render={({ field: { ref, ...rest } }) => (
-                                    <FeaturedImageUpload {...rest} />
+                                    <MultipleUploadImage {...rest} />
                                 )}
                             />
                         </div>
@@ -300,17 +348,16 @@ const RecipeForm = ({
                     {!ingredients.isLoading && ingredients.data
                         ? ingredientsFields.map((field, index) => (
                               <div
-                                  className="mt-6 grid grid-cols-12 gap-y-6 gap-x-4 sm:grid-cols-6"
+                                  className="mt-6 grid gap-4 w-full"
                                   key={field.id}
                               >
                                   <div>
-                                      <label
-                                          htmlFor="title"
-                                          className="block text-sm font-medium text-gray-700"
-                                      >
-                                          Name
+                                      <label className="label">
+                                          <span className="label-text">
+                                              Ingredient name
+                                          </span>
                                       </label>
-                                      <div className="mt-1">
+                                      <div>
                                           <Controller
                                               control={control}
                                               name={
@@ -327,6 +374,7 @@ const RecipeForm = ({
                                                       <AsyncCreatableSelect
                                                           ref={ref}
                                                           cacheOptions
+                                                          className="min-w-full"
                                                           defaultValue={{
                                                               value: value,
                                                               label: ingredients.data.data.find(
@@ -363,30 +411,34 @@ const RecipeForm = ({
                                       </div>
                                   </div>
                                   <div>
-                                      <label
-                                          htmlFor="amount"
-                                          className="block text-sm font-medium text-gray-700"
-                                      >
-                                          Amount
-                                      </label>
-                                      <div className="mt-1">
-                                          <input
-                                              type="text"
-                                              id="amount"
-                                              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                              {...register(
-                                                  `ingredients.${index}.amount` as const,
-                                                  {
-                                                      required:
-                                                          "This is required",
+                                      <Controller
+                                          name={`ingredients.${index}.amount`}
+                                          control={control}
+                                          rules={{
+                                              required: "Amount required",
+                                          }}
+                                          render={({
+                                              field: { onChange, value },
+                                              fieldState: { error },
+                                          }) => (
+                                              <TextInput
+                                                  label="Ingredient amount"
+                                                  placeholder="Input amount"
+                                                  value={value}
+                                                  onChange={onChange}
+                                                  error={!!error}
+                                                  helperText={
+                                                      error
+                                                          ? error.message
+                                                          : null
                                                   }
-                                              )}
-                                          />
-                                      </div>
+                                              />
+                                          )}
+                                      />
                                   </div>
-                                  <div className="mt-8">
+                                  <div>
                                       <button
-                                          className="p-2 bg-blue-500"
+                                          className="btn btn-error"
                                           onClick={() => {
                                               ingredientsRemove(index);
                                           }}
@@ -399,7 +451,7 @@ const RecipeForm = ({
                         : "Loading..."}
                     <div className="mt-8">
                         <button
-                            className="p-2 bg-blue-500"
+                            className="p-2 btn btn-primary"
                             type="button"
                             onClick={() => {
                                 ingredientsAppend({

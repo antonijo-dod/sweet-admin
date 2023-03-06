@@ -1,5 +1,4 @@
 import { ReactElement } from "react";
-
 import { flexRender } from "@tanstack/react-table";
 
 type TTableLayoutProps = {
@@ -57,10 +56,7 @@ const TableLayout = ({ table }: TTableLayoutProps): ReactElement => {
                         .rows.slice(0, 10)
                         .map((row) => {
                             return (
-                                <tr
-                                    key={row.id}
-                                    //onClick={() => handleRowClick(row)}
-                                >
+                                <tr key={row.id}>
                                     {row.getVisibleCells().map((cell) => {
                                         return (
                                             <td

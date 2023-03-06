@@ -2,10 +2,8 @@ import React, { ReactElement } from "react";
 import { RecipeForm } from "@/components";
 
 const EditRecipeForm = (): ReactElement => {
-    // Get default data from API
-    // If success, update data
-    // If fail, show error message
-    // Save or publish action
+    // When save show success message
+    // When change publish state show success message
 
     const data = {
         title: "Novi recept",
@@ -26,7 +24,8 @@ const EditRecipeForm = (): ReactElement => {
     };
 
     const handleOnFormSubmit = (values: any) => {
-        // Update data on server
+        // On success show toast message
+        // When saving is in process show loading button on on image modal with text "Saving..." and spinner
         console.log(values);
     };
 

@@ -1,6 +1,6 @@
 import React, { ReactElement, useState, useEffect } from "react";
-import { Modal } from "@/components/ui";
-import { ImageCard, Button } from "@/components";
+import { Modal, ImageThumbnailWithAction } from "@/components/ui";
+import { ImageCard, Button, EmptyFile } from "@/components";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
 const IMAGES = [
@@ -63,76 +63,31 @@ const FeaturedImageUpload = ({
     return (
         <>
             <div className="grid">
-                <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6">
-                    <div className="space-y-1 text-center">
-                        <svg
-                            className="mx-auto h-12 w-12 text-gray-400"
-                            stroke="currentColor"
-                            fill="none"
-                            viewBox="0 0 48 48"
-                            aria-hidden="true"
-                        >
-                            <path
-                                d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                                strokeWidth={2}
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            />
-                        </svg>
-                        <div className="flex text-sm text-gray-600">
-                            <label
-                                htmlFor="file-upload"
-                                className="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500"
-                            >
-                                <button
-                                    onClick={() => setIsOpen(true)}
-                                    type="button"
-                                >
-                                    Upload a file
-                                </button>
-                                <input
-                                    id="file-upload"
-                                    name="file-upload"
-                                    type="file"
-                                    className="sr-only"
-                                />
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <ul className="mt-4 grid gap-y-6 grid-cols-12 sm:gap-x-4 w-full">
+                <ul className="mt-4 flex flex-wrap gap-4">
                     {selectedImage.map((image) => (
-                        <li
-                            key={image.id}
-                            className="relative bg-red-400 col-span-1"
-                        >
-                            <div className="group block w-full aspect-w-10 aspect-h-7 rounded-lg bg-gray-100 overflow-hidden">
-                                <img
-                                    src={image.url}
-                                    alt=""
-                                    className="object-cover pointer-events-none"
-                                />
-                                <button
-                                    type="button"
-                                    className="absolute inset-0 focus:outline-none"
-                                >
-                                    <span className="sr-only">
-                                        Select image image
-                                    </span>
-                                </button>
-                            </div>
-                            <div className="absolute top-2 left-2">
-                                <Button
-                                    onClick={() => handleRemoveImage(image.id)}
-                                >
-                                    <XMarkIcon
-                                        className="h-2 w-2 text-white"
-                                        aria-hidden="true"
-                                    />
-                                </Button>
-                            </div>
+                        <li key={image.id}>
+                            <ImageThumbnailWithAction
+                                url={image.url}
+                                actions={
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            handleRemoveImage(image.id)
+                                        }
+                                        className="btn btn-sm btn-primary"
+                                    >
+                                        <XMarkIcon
+                                            className="h-2 w-2 text-white"
+                                            aria-hidden="true"
+                                        />
+                                    </button>
+                                }
+                            />
                         </li>
                     ))}
+                    <li>
+                        <EmptyFile onClick={() => setIsOpen(true)} />
+                    </li>
                 </ul>
             </div>
             <Modal

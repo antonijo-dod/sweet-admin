@@ -6,6 +6,7 @@ import EditRecipe from "@/pages/recipes/edit-recipe";
 import Categories from "@/pages/categories/all-categories";
 import Login from "@/pages/login";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import AuthContextProvider from "@/context/authContext";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -44,6 +45,7 @@ function App() {
                     </Routes>
                 </Router>
             </AuthContextProvider>
+            <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
     );
 }

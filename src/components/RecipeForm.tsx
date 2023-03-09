@@ -1,4 +1,4 @@
-import { ReactElement, useState, useEffect } from "react";
+import { ReactElement, useState } from "react";
 import { MultipleUploadImage, SingleUploadImage } from "@/components";
 import { TextInput, TextArea } from "@/components/elements";
 import { useForm, Controller, useFieldArray } from "react-hook-form";

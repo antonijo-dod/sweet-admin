@@ -2,7 +2,6 @@ import { useState } from "react";
 import { RecipeForm } from "@/components";
 import { useCreateRecipe } from "@/hooks/recipes";
 import { Modal } from "@/components/ui";
-import {} from "@heroicons/react/20/solid";
 import { Spinner } from "@/components/elements";
 
 const NewRecipeContainer = () => {
@@ -13,9 +12,13 @@ const NewRecipeContainer = () => {
 
     const handleOnFormSubmit = async (values: any) => {
         setIsModalOpen(true);
-        /* await createRecipe.mutate(values, {
-            onSuccess: () => {},
-        }); */
+        await createRecipe.mutate(values, {
+            onSuccess: () => {
+                setTimeout(() => {
+                    setIsModalOpen(false);
+                }, 2000);
+            },
+        });
     };
 
     return (

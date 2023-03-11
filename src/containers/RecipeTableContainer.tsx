@@ -72,7 +72,7 @@ const RecipeTableContainer = (): ReactElement => {
             <div className="btn-group">
                 <button
                     className="btn btn-sm"
-                    onClick={() => navigate(`/recipes/${row.original.id}/edit`)}
+                    onClick={() => navigate(`/recipes/${row.original.slug}/edit`)}
                 >
                     View
                 </button>

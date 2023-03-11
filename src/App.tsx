@@ -34,7 +34,7 @@ function App() {
                                 element={<NewRecipe />}
                             />
                             <Route
-                                path="/recipes/:id/edit"
+                                path="/recipes/:slug/edit"
                                 element={<EditRecipe />}
                             />
                             <Route

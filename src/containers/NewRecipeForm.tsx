@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { RecipeForm } from "@/components";
-import { useCreateRecipe } from "@/hooks/recipes";
-import { Modal } from "@/components/ui";
-import { Spinner } from "@/components/elements";
+import { useState } from 'react';
+import { RecipeForm } from '@/components';
+import { useCreateRecipe } from '@/hooks/recipes';
+import { Modal } from '@/components/ui';
+import { Spinner } from '@/components/elements';
 
 const NewRecipeContainer = () => {
     const createRecipe = useCreateRecipe();
@@ -23,7 +23,7 @@ const NewRecipeContainer = () => {
 
     return (
         <>
-            <RecipeForm onFormSubmit={(e) => handleOnFormSubmit(e)} />
+            <RecipeForm onFormSubmit={e => handleOnFormSubmit(e)} />
             <Modal
                 title="Create new recipe in progress"
                 isModalOpen={isModalOpen}

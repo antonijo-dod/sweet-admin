@@ -1,5 +1,5 @@
-import { ReactElement, useState, Fragment, ReactNode } from "react";
-import { Dialog, Transition } from "@headlessui/react";
+import { ReactElement, useState, Fragment, ReactNode } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
 
 type TModalProps = {
     isModalOpen: boolean;
@@ -8,12 +8,7 @@ type TModalProps = {
     children: ReactNode;
 };
 
-const Modal = ({
-    isModalOpen,
-    closeModal,
-    title,
-    children,
-}: TModalProps): ReactElement => {
+const Modal = ({ isModalOpen, closeModal, title, children }: TModalProps): ReactElement => {
     return (
         <>
             <Transition appear show={isModalOpen} as={Fragment}>
@@ -42,10 +37,7 @@ const Modal = ({
                                 leaveTo="opacity-0 scale-95"
                             >
                                 <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                                    <Dialog.Title
-                                        as="h3"
-                                        className="text-lg font-medium leading-6 text-gray-900"
-                                    >
+                                    <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
                                         {title}
                                     </Dialog.Title>
                                     <div className="mt-8">{children}</div>

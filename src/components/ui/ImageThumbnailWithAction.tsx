@@ -1,14 +1,11 @@
-import { ReactElement, ReactNode } from "react";
+import { ReactElement, ReactNode } from 'react';
 
 type ImageThumbnailWithActionsProps = {
     url: string;
     actions: ReactNode;
 };
 
-const ImageThumbnailWithActions = ({
-    url,
-    actions,
-}: ImageThumbnailWithActionsProps): ReactElement => {
+const ImageThumbnailWithActions = ({ url, actions }: ImageThumbnailWithActionsProps): ReactElement => {
     return (
         <div className="w-56 bg-base-100 shadow-xl relative rounded overflow-hidden">
             <figure className="rounded-lg">

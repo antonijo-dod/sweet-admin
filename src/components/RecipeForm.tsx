@@ -1,10 +1,10 @@
-import { ReactElement, useState } from "react";
-import { MultipleUploadImage, SingleUploadImage } from "@/components";
-import { TextInput, TextArea } from "@/components/elements";
-import { useForm, Controller, useFieldArray } from "react-hook-form";
-import Select from "react-select";
-import { useGetIngredients, useCreateIngredient } from "@/hooks/ingredients";
-import AsyncCreatableSelect from "react-select/async-creatable";
+import { ReactElement, useState } from 'react';
+import { MultipleUploadImage, SingleUploadImage } from '@/components';
+import { TextInput, TextArea } from '@/components/elements';
+import { useForm, Controller, useFieldArray } from 'react-hook-form';
+import Select from 'react-select';
+import { useGetIngredients, useCreateIngredient } from '@/hooks/ingredients';
+import AsyncCreatableSelect from 'react-select/async-creatable';
 
 type TFormValues = {
     name: string;
@@ -23,11 +23,8 @@ type TRecipeFormProps = {
     defaultData?: TFormValues;
 };
 
-const RecipeForm = ({
-    onFormSubmit,
-    defaultData,
-}: TRecipeFormProps): ReactElement => {
-    const [searchIngredients, setSearchIngredients] = useState<string>("");
+const RecipeForm = ({ onFormSubmit, defaultData }: TRecipeFormProps): ReactElement => {
+    const [searchIngredients, setSearchIngredients] = useState<string>('');
 
     const ingredients = useGetIngredients({ search: searchIngredients });
     const createIngredient = useCreateIngredient();
@@ -61,7 +58,7 @@ const RecipeForm = ({
     };
 
     const convertIngredientsForSelect = () => {
-        const ingredientsData = ingredients.data?.data.map((ingredient) => {
+        const ingredientsData = ingredients.data?.data.map(ingredient => {
             return {
                 value: ingredient.id,
                 label: ingredient.name,
@@ -76,13 +73,10 @@ const RecipeForm = ({
         await createIngredient.mutate(
             { name },
             {
-                onSuccess: (data) => {
-                    console.log(
-                        "🚀 ~ file: RecipeForm.tsx:72 ~ await createIngredient.mutate ~ data:",
-                        data
-                    );
+                onSuccess: data => {
+                    console.log('🚀 ~ file: RecipeForm.tsx:72 ~ await createIngredient.mutate ~ data:', data);
                 },
-            }
+            },
         );
     };
 
@@ -92,24 +86,17 @@ const RecipeForm = ({
     };
 
     const categoryOptions = [
-        { value: "1", label: "Breakfast" },
-        { value: "2", label: "Nesto drugo" },
+        { value: '1', label: 'Breakfast' },
+        { value: '2', label: 'Nesto drugo' },
     ];
 
     return (
-        <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="space-y-8 divide-y divide-gray-200"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 divide-y divide-gray-200">
             <div className="space-y-8 divide-y divide-gray-200">
                 <div>
                     <div>
-                        <h3 className="text-lg font-medium leading-6 text-gray-900">
-                            Info about your recipe
-                        </h3>
-                        <p className="mt-1 text-sm text-gray-500">
-                            Fill all the fields to create a new recipe.
-                        </p>
+                        <h3 className="text-lg font-medium leading-6 text-gray-900">Info about your recipe</h3>
+                        <p className="mt-1 text-sm text-gray-500">Fill all the fields to create a new recipe.</p>
                     </div>
 
                     <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
@@ -117,20 +104,15 @@ const RecipeForm = ({
                             <Controller
                                 name="name"
                                 control={control}
-                                rules={{ required: "Name required" }}
-                                render={({
-                                    field: { onChange, value },
-                                    fieldState: { error },
-                                }) => (
+                                rules={{ required: 'Name required' }}
+                                render={({ field: { onChange, value }, fieldState: { error } }) => (
                                     <TextInput
                                         label="Name"
                                         placeholder="Input recipe name"
                                         value={value}
                                         onChange={onChange}
                                         error={!!error}
-                                        helperText={
-                                            error ? error.message : null
-                                        }
+                                        helperText={error ? error.message : null}
                                     />
                                 )}
                             />
@@ -140,20 +122,15 @@ const RecipeForm = ({
                             <Controller
                                 name="slug"
                                 control={control}
-                                rules={{ required: "Slug required" }}
-                                render={({
-                                    field: { onChange, value },
-                                    fieldState: { error },
-                                }) => (
+                                rules={{ required: 'Slug required' }}
+                                render={({ field: { onChange, value }, fieldState: { error } }) => (
                                     <TextInput
                                         label="Slug"
                                         placeholder="Input slug"
                                         value={value}
                                         onChange={onChange}
                                         error={!!error}
-                                        helperText={
-                                            error ? error.message : null
-                                        }
+                                        helperText={error ? error.message : null}
                                     />
                                 )}
                             />
@@ -163,20 +140,15 @@ const RecipeForm = ({
                             <Controller
                                 name="description"
                                 control={control}
-                                rules={{ required: "Description required" }}
-                                render={({
-                                    field: { onChange, value },
-                                    fieldState: { error },
-                                }) => (
+                                rules={{ required: 'Description required' }}
+                                render={({ field: { onChange, value }, fieldState: { error } }) => (
                                     <TextArea
                                         label="Description"
                                         placeholder="Input description"
                                         value={value}
                                         onChange={onChange}
                                         error={!!error}
-                                        helperText={
-                                            error ? error.message : null
-                                        }
+                                        helperText={error ? error.message : null}
                                     />
                                 )}
                             />
@@ -184,36 +156,20 @@ const RecipeForm = ({
 
                         <div className="col-span-12 sm:col-span-6">
                             <div>
-                                <label
-                                    htmlFor="categories"
-                                    className="block text-sm font-medium text-gray-700"
-                                >
+                                <label htmlFor="categories" className="block text-sm font-medium text-gray-700">
                                     Categories
                                 </label>
                                 <div className="mt-1">
                                     <Controller
                                         control={control}
                                         name="categories"
-                                        render={({
-                                            field: {
-                                                onChange,
-                                                value,
-                                                name,
-                                                ref,
-                                            },
-                                        }) => (
+                                        render={({ field: { onChange, value, name, ref } }) => (
                                             <Select
                                                 isMulti
                                                 name="colors"
                                                 ref={ref}
                                                 options={categoryOptions}
-                                                onChange={(val) =>
-                                                    onChange(
-                                                        val.map((v) =>
-                                                            Number(v.value)
-                                                        )
-                                                    )
-                                                }
+                                                onChange={val => onChange(val.map(v => Number(v.value)))}
                                             />
                                         )}
                                     />
@@ -225,11 +181,8 @@ const RecipeForm = ({
                             <Controller
                                 name="preparingTime"
                                 control={control}
-                                rules={{ required: "Preparing time required" }}
-                                render={({
-                                    field: { onChange, value },
-                                    fieldState: { error },
-                                }) => (
+                                rules={{ required: 'Preparing time required' }}
+                                render={({ field: { onChange, value }, fieldState: { error } }) => (
                                     <TextInput
                                         label="Preparing time"
                                         placeholder="Input preparing time"
@@ -237,9 +190,7 @@ const RecipeForm = ({
                                         type="number"
                                         onChange={onChange}
                                         error={!!error}
-                                        helperText={
-                                            error ? error.message : null
-                                        }
+                                        helperText={error ? error.message : null}
                                     />
                                 )}
                             />
@@ -249,11 +200,8 @@ const RecipeForm = ({
                             <Controller
                                 name="cookingTime"
                                 control={control}
-                                rules={{ required: "Cooking time required" }}
-                                render={({
-                                    field: { onChange, value },
-                                    fieldState: { error },
-                                }) => (
+                                rules={{ required: 'Cooking time required' }}
+                                render={({ field: { onChange, value }, fieldState: { error } }) => (
                                     <TextInput
                                         label="Cooking time"
                                         placeholder="Input cooking time"
@@ -261,9 +209,7 @@ const RecipeForm = ({
                                         type="number"
                                         onChange={onChange}
                                         error={!!error}
-                                        helperText={
-                                            error ? error.message : null
-                                        }
+                                        helperText={error ? error.message : null}
                                     />
                                 )}
                             />
@@ -273,11 +219,8 @@ const RecipeForm = ({
                             <Controller
                                 name="portions"
                                 control={control}
-                                rules={{ required: "Portion number required" }}
-                                render={({
-                                    field: { onChange, value },
-                                    fieldState: { error },
-                                }) => (
+                                rules={{ required: 'Portion number required' }}
+                                render={({ field: { onChange, value }, fieldState: { error } }) => (
                                     <TextInput
                                         label="Portions"
                                         placeholder="Input portion number"
@@ -285,9 +228,7 @@ const RecipeForm = ({
                                         type="number"
                                         onChange={onChange}
                                         error={!!error}
-                                        helperText={
-                                            error ? error.message : null
-                                        }
+                                        helperText={error ? error.message : null}
                                     />
                                 )}
                             />
@@ -295,81 +236,54 @@ const RecipeForm = ({
 
                         <div className="col-span-12 sm:col-span-6">
                             <div className="max-w-sm">
-                                <label
-                                    htmlFor="featured-image"
-                                    className="block text-sm font-medium text-gray-700 mb-2"
-                                >
+                                <label htmlFor="featured-image" className="block text-sm font-medium text-gray-700 mb-2">
                                     Featured image
                                 </label>
                                 <Controller
                                     name="featuredImageId"
                                     control={control}
                                     rules={{
-                                        required: "Odaberi sliku",
+                                        required: 'Odaberi sliku',
                                     }}
-                                    render={({ field: { ref, ...rest } }) => (
-                                        <SingleUploadImage {...rest} />
-                                    )}
+                                    render={({ field: { ref, value, ...rest } }) => <SingleUploadImage value={value} {...rest} />}
                                 />
                             </div>
                         </div>
 
                         <div className="col-span-12 sm:col-span-6">
-                            <label
-                                htmlFor="featured-image"
-                                className="block text-sm font-medium text-gray-700"
-                            >
+                            <label htmlFor="featured-image" className="block text-sm font-medium text-gray-700">
                                 Gallery images
                             </label>
                             <Controller
                                 name="galleryImages"
                                 control={control}
                                 rules={{
-                                    required: "Odaberi slike",
+                                    required: 'Odaberi slike',
                                 }}
-                                render={({ field: { ref, ...rest } }) => (
-                                    <MultipleUploadImage {...rest} />
-                                )}
+                                render={({ field: { ref, ...rest } }) => <MultipleUploadImage {...rest} />}
                             />
                         </div>
                     </div>
                 </div>
                 <div className="pt-8">
                     <div>
-                        <h3 className="text-lg font-medium leading-6 text-gray-900">
-                            Ingredients
-                        </h3>
-                        <p className="mt-1 text-sm text-gray-500">
-                            Write recipe ingredients.
-                        </p>
+                        <h3 className="text-lg font-medium leading-6 text-gray-900">Ingredients</h3>
+                        <p className="mt-1 text-sm text-gray-500">Write recipe ingredients.</p>
                     </div>
                     {/* ROW */}
 
                     {!ingredients.isLoading && ingredients.data
                         ? ingredientsFields.map((field, index) => (
-                              <div
-                                  className="mt-6 grid gap-4 w-full"
-                                  key={field.id}
-                              >
+                              <div className="mt-6 grid gap-4 w-full" key={field.id}>
                                   <div>
                                       <label className="label">
-                                          <span className="label-text">
-                                              Ingredient name
-                                          </span>
+                                          <span className="label-text">Ingredient name</span>
                                       </label>
                                       <div>
                                           <Controller
                                               control={control}
-                                              name={
-                                                  `ingredients.${index}.id` as const
-                                              }
-                                              render={({
-                                                  field: {
-                                                      onChange,
-                                                      value,
-                                                      ref,
-                                                  },
-                                              }) => {
+                                              name={`ingredients.${index}.id` as const}
+                                              render={({ field: { onChange, value, ref } }) => {
                                                   return (
                                                       <AsyncCreatableSelect
                                                           ref={ref}
@@ -377,33 +291,13 @@ const RecipeForm = ({
                                                           className="min-w-full"
                                                           defaultValue={{
                                                               value: value,
-                                                              label: ingredients.data.data.find(
-                                                                  (
-                                                                      ingredient
-                                                                  ) =>
-                                                                      ingredient.id ===
-                                                                      value
-                                                              )?.name,
+                                                              label: ingredients.data.data.find(ingredient => ingredient.id === value)?.name,
                                                           }}
-                                                          isLoading={
-                                                              ingredients.isLoading
-                                                          }
-                                                          loadOptions={(e) =>
-                                                              handleLoadOptions(
-                                                                  e
-                                                              )
-                                                          }
+                                                          isLoading={ingredients.isLoading}
+                                                          loadOptions={e => handleLoadOptions(e)}
                                                           defaultOptions={convertIngredientsForSelect()}
-                                                          onCreateOption={(e) =>
-                                                              handleCreateIngredient(
-                                                                  e
-                                                              )
-                                                          }
-                                                          onChange={(val) =>
-                                                              onChange(
-                                                                  val.value
-                                                              )
-                                                          }
+                                                          onCreateOption={e => handleCreateIngredient(e)}
+                                                          onChange={val => onChange(val.value)}
                                                       />
                                                   );
                                               }}
@@ -415,23 +309,16 @@ const RecipeForm = ({
                                           name={`ingredients.${index}.amount`}
                                           control={control}
                                           rules={{
-                                              required: "Amount required",
+                                              required: 'Amount required',
                                           }}
-                                          render={({
-                                              field: { onChange, value },
-                                              fieldState: { error },
-                                          }) => (
+                                          render={({ field: { onChange, value }, fieldState: { error } }) => (
                                               <TextInput
                                                   label="Ingredient amount"
                                                   placeholder="Input amount"
                                                   value={value}
                                                   onChange={onChange}
                                                   error={!!error}
-                                                  helperText={
-                                                      error
-                                                          ? error.message
-                                                          : null
-                                                  }
+                                                  helperText={error ? error.message : null}
                                               />
                                           )}
                                       />
@@ -448,7 +335,7 @@ const RecipeForm = ({
                                   </div>
                               </div>
                           ))
-                        : "Loading..."}
+                        : 'Loading...'}
                     <div className="mt-8">
                         <button
                             className="p-2 btn btn-primary"
@@ -456,7 +343,7 @@ const RecipeForm = ({
                             onClick={() => {
                                 ingredientsAppend({
                                     id: 0,
-                                    amount: "",
+                                    amount: '',
                                 });
                             }}
                         >

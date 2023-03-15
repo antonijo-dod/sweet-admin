@@ -1,5 +1,5 @@
-import { sweetServer } from "@/api/config";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { sweetServer } from '@/api/config';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useDeleteRecipe = () => {
     const queryClient = useQueryClient();
@@ -12,7 +12,7 @@ export const useDeleteRecipe = () => {
     const recipe = useMutation({
         mutationFn: async (id: number) => await deleteRecipe(id),
         onSuccess: () => {
-            queryClient.invalidateQueries("recipes");
+            queryClient.invalidateQueries('recipes');
         },
     });
 

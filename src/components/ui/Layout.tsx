@@ -1,46 +1,38 @@
-import { ReactElement, ReactNode, Fragment, useState } from "react";
-import { Outlet } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { Dialog, Menu, Transition } from "@headlessui/react";
-import {
-    Bars3BottomLeftIcon,
-    FolderIcon,
-    HomeIcon,
-    UsersIcon,
-    XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { ReactElement, ReactNode, Fragment, useState } from 'react';
+import { Outlet } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { Dialog, Menu, Transition } from '@headlessui/react';
+import { Bars3BottomLeftIcon, FolderIcon, HomeIcon, UsersIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { useLogout } from '@/hooks/auth';
+import Button from '../Button';
 
 const navigation = [
-    { name: "Recipes", href: "/recipes", icon: HomeIcon, current: true },
+    { name: 'Recipes', href: '/recipes', icon: HomeIcon, current: true },
     {
-        name: "Categories",
-        href: "/categories",
+        name: 'Categories',
+        href: '/categories',
         icon: FolderIcon,
         current: false,
     },
-    { name: "Settings", href: "#", icon: UsersIcon, current: false },
+    { name: 'Settings', href: '#', icon: UsersIcon, current: false },
 ];
 const userNavigation = [
-    { name: "Your Profile", href: "#" },
-    { name: "Settings", href: "#" },
-    { name: "Sign out", href: "#" },
+    { name: 'Your Profile', href: '#' },
+    { name: 'Settings', href: '#' },
 ];
 
 function classNames(...classes: any) {
-    return classes.filter(Boolean).join(" ");
+    return classes.filter(Boolean).join(' ');
 }
 
 const Layout = (): ReactElement => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const logout = useLogout();
 
     return (
         <div>
             <Transition.Root show={sidebarOpen} as={Fragment}>
-                <Dialog
-                    as="div"
-                    className="relative z-40 md:hidden"
-                    onClose={setSidebarOpen}
-                >
+                <Dialog as="div" className="relative z-40 md:hidden" onClose={setSidebarOpen}>
                     <Transition.Child
                         as={Fragment}
                         enter="transition-opacity ease-linear duration-300"
@@ -77,17 +69,10 @@ const Layout = (): ReactElement => {
                                         <button
                                             type="button"
                                             className="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-                                            onClick={() =>
-                                                setSidebarOpen(false)
-                                            }
+                                            onClick={() => setSidebarOpen(false)}
                                         >
-                                            <span className="sr-only">
-                                                Close sidebar
-                                            </span>
-                                            <XMarkIcon
-                                                className="h-6 w-6 text-white"
-                                                aria-hidden="true"
-                                            />
+                                            <span className="sr-only">Close sidebar</span>
+                                            <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
                                         </button>
                                     </div>
                                 </Transition.Child>
@@ -100,21 +85,16 @@ const Layout = (): ReactElement => {
                                 </div>
                                 <div className="mt-5 h-0 flex-1 overflow-y-auto">
                                     <nav className="space-y-1 px-2">
-                                        {navigation.map((item) => (
+                                        {navigation.map(item => (
                                             <Link
                                                 key={item.name}
                                                 to={item.href}
                                                 className={classNames(
-                                                    item.current
-                                                        ? "bg-indigo-800 text-white"
-                                                        : "text-indigo-100 hover:bg-indigo-600",
-                                                    "group flex items-center px-2 py-2 text-base font-medium rounded-md"
+                                                    item.current ? 'bg-indigo-800 text-white' : 'text-indigo-100 hover:bg-indigo-600',
+                                                    'group flex items-center px-2 py-2 text-base font-medium rounded-md',
                                                 )}
                                             >
-                                                <item.icon
-                                                    className="mr-4 h-6 w-6 flex-shrink-0 text-indigo-300"
-                                                    aria-hidden="true"
-                                                />
+                                                <item.icon className="mr-4 h-6 w-6 flex-shrink-0 text-indigo-300" aria-hidden="true" />
                                                 {item.name}
                                             </Link>
                                         ))}
@@ -134,29 +114,20 @@ const Layout = (): ReactElement => {
                 {/* Sidebar component, swap this element with another sidebar if you like */}
                 <div className="flex flex-grow flex-col overflow-y-auto bg-indigo-700 pt-5">
                     <div className="flex flex-shrink-0 items-center px-4">
-                        <img
-                            className="h-8 w-auto"
-                            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=300"
-                            alt="Your Company"
-                        />
+                        <img className="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=300" alt="Your Company" />
                     </div>
                     <div className="mt-5 flex flex-1 flex-col">
                         <nav className="flex-1 space-y-1 px-2 pb-4">
-                            {navigation.map((item) => (
+                            {navigation.map(item => (
                                 <Link
                                     key={item.name}
                                     to={item.href}
                                     className={classNames(
-                                        item.current
-                                            ? "bg-indigo-800 text-white"
-                                            : "text-indigo-100 hover:bg-indigo-600",
-                                        "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+                                        item.current ? 'bg-indigo-800 text-white' : 'text-indigo-100 hover:bg-indigo-600',
+                                        'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
                                     )}
                                 >
-                                    <item.icon
-                                        className="mr-3 h-6 w-6 flex-shrink-0 text-indigo-300"
-                                        aria-hidden="true"
-                                    />
+                                    <item.icon className="mr-3 h-6 w-6 flex-shrink-0 text-indigo-300" aria-hidden="true" />
                                     {item.name}
                                 </Link>
                             ))}
@@ -172,10 +143,7 @@ const Layout = (): ReactElement => {
                         onClick={() => setSidebarOpen(true)}
                     >
                         <span className="sr-only">Open sidebar</span>
-                        <Bars3BottomLeftIcon
-                            className="h-6 w-6"
-                            aria-hidden="true"
-                        />
+                        <Bars3BottomLeftIcon className="h-6 w-6" aria-hidden="true" />
                     </button>
                     <div className="flex flex-1 justify-between px-4">
                         <div className="flex flex-1"></div>
@@ -184,9 +152,7 @@ const Layout = (): ReactElement => {
                             <Menu as="div" className="relative ml-3">
                                 <div>
                                     <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                                        <span className="sr-only">
-                                            Open user menu
-                                        </span>
+                                        <span className="sr-only">Open user menu</span>
                                         <img
                                             className="h-8 w-8 rounded-full"
                                             src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
@@ -204,23 +170,21 @@ const Layout = (): ReactElement => {
                                     leaveTo="transform opacity-0 scale-95"
                                 >
                                     <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                        {userNavigation.map((item) => (
+                                        {userNavigation.map(item => (
                                             <Menu.Item key={item.name}>
                                                 {({ active }) => (
                                                     <a
                                                         href={item.href}
-                                                        className={classNames(
-                                                            active
-                                                                ? "bg-gray-100"
-                                                                : "",
-                                                            "block px-4 py-2 text-sm text-gray-700"
-                                                        )}
+                                                        className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                     >
                                                         {item.name}
                                                     </a>
                                                 )}
                                             </Menu.Item>
                                         ))}
+                                        <Button size="sm" wide onClick={() => logout()}>
+                                            Sign out
+                                        </Button>
                                     </Menu.Items>
                                 </Transition>
                             </Menu>

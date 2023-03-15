@@ -14,40 +14,31 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 const queryClient = new QueryClient();
 
 function App() {
-    return (
-        <QueryClientProvider client={queryClient}>
-            <AuthContextProvider>
-                <Router>
-                    <Routes>
-                        <Route path="/login" element={<Login />} />
-                        <Route
-                            path="/"
-                            element={
-                                <ProtectedRoute>
-                                    <Layout />
-                                </ProtectedRoute>
-                            }
-                        >
-                            <Route path="/recipes" element={<Recipes />} />
-                            <Route
-                                path="/recipes/new"
-                                element={<NewRecipe />}
-                            />
-                            <Route
-                                path="/recipes/:slug/edit"
-                                element={<EditRecipe />}
-                            />
-                            <Route
-                                path="/categories"
-                                element={<Categories />}
-                            />
-                        </Route>
-                    </Routes>
-                </Router>
-            </AuthContextProvider>
-            <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
-    );
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthContextProvider>
+        <Router>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Layout />
+                </ProtectedRoute>
+              }
+            >
+              <Route path="/recipes" element={<Recipes />} />
+              <Route path="/recipes/new" element={<NewRecipe />} />
+              <Route path="/recipes/:slug/edit" element={<EditRecipe />} />
+              <Route path="/categories" element={<Categories />} />
+            </Route>
+          </Routes>
+        </Router>
+      </AuthContextProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
+  );
 }
 
 export default App;

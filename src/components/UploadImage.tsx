@@ -1,5 +1,8 @@
 import { useState, ReactElement } from 'react';
-import { ImageCard } from '@/components';
+import { useUploadImages } from '@/hooks/images';
+import { ImageThumbnailWithAction } from '@/components/ui';
+import { XMarkIcon } from '@heroicons/react/24/outline';
+import Button from './Button';
 
 const SelectUpload = ({ children }) => {
     return (
@@ -38,13 +41,12 @@ const ShowUpload = ({ children }): ReactElement => {
     return <ul className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">{children}</ul>;
 };
 
-const UploadImage = (): ReactElement => {
+const UploadImage = () => {
+    const uploadImages = useUploadImages();
+
     const [step, setStep] = useState(1);
     const [selectedImages, setSelectedImages] = useState([]);
     const [previewImages, setPreviewImages] = useState([]);
-
-    // If selected Images length !== 0 set step to 2
-    // If press button add more assets set step to 1
 
     const handleImageChange = event => {
         setSelectedImages([...selectedImages, ...event.target.files]);
@@ -54,6 +56,25 @@ const UploadImage = (): ReactElement => {
         }
         setPreviewImages([...previewImages, ...newFiles]);
         setStep(2);
+    };
+
+    const handleRemoveImage = (imageIndex: number) => {
+        setSelectedImages(selectedImages.filter((_, index) => index !== imageIndex));
+        setPreviewImages(previewImages.filter((_, index) => index !== imageIndex));
+    };
+
+    const handleUploadImages = async () => {
+        let formData = new FormData();
+
+        for (let i = 0; i < selectedImages.length; i++) {
+            formData.append('photos', selectedImages[i]);
+        }
+
+        await uploadImages.mutate(formData, {
+            onSuccess: () => {
+                console.log("It's uploaded");
+            },
+        });
     };
 
     if (step === 1)
@@ -66,11 +87,18 @@ const UploadImage = (): ReactElement => {
         return (
             <ShowUpload>
                 {previewImages.map((image, index) => (
-                    <ImageCard key={index} url={image} />
+                    <ImageThumbnailWithAction
+                        url={image}
+                        actions={
+                            <button type="button" onClick={() => handleRemoveImage(index)} className="btn btn-sm btn-primary">
+                                <XMarkIcon className="h-2 w-2 text-white" aria-hidden="true" />
+                            </button>
+                        }
+                    />
                 ))}
+                <Button onClick={handleUploadImages}>Upload images</Button>
             </ShowUpload>
         );
-    return <div>Jelo</div>;
 };
 
 export default UploadImage;

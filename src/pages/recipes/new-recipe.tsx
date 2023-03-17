@@ -1,7 +1,7 @@
-import { Fragment, ReactElement, useState } from "react";
-import { PageHeading } from "@/components/ui";
-import { Button } from "@/components";
-import { NewRecipeForm } from "@/containers";
+import { Fragment, ReactElement, useState } from 'react';
+import { PageHeading } from '@/components/ui';
+import { Button } from '@/components';
+import { NewRecipeForm } from '@/containers';
 
 const NewRecipe = (): ReactElement => {
     return (

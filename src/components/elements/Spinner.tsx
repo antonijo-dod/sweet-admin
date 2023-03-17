@@ -1,22 +1,20 @@
-import { useState, CSSProperties } from "react";
-import MoonLoader from "react-spinners/MoonLoader";
+import { useState, CSSProperties } from 'react';
+import MoonLoader from 'react-spinners/MoonLoader';
 
 const override: CSSProperties = {
-    display: "block",
-    margin: "0 auto",
-    borderColor: "red",
+    display: 'block',
+    margin: '0 auto',
+    borderColor: 'red',
 };
 const Spinner = () => {
-    let [loading, setLoading] = useState(true);
-    let [color, setColor] = useState("#ffffff");
-
     return (
-        <div className="sweet-loading">
+        <div className="w-full h-full flex justify-center items-center">
             <MoonLoader
                 className="text-red-500"
-                loading={loading}
+                color="blue"
+                loading={true}
                 cssOverride={override}
-                size={150}
+                size={100}
                 aria-label="Loading Spinner"
                 data-testid="loader"
             />

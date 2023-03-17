@@ -1,4 +1,4 @@
-import { Layout } from '@/components/ui';
+import { Layout } from '@/components/layout';
 import React, { ReactElement } from 'react';
 import { Navigate, Outlet, Route } from 'react-router-dom';
 import { useAuthContext } from '@/hooks/auth';

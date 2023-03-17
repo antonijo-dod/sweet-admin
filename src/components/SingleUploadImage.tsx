@@ -1,4 +1,4 @@
-import React, { ReactElement, useState, useEffect } from 'react';
+import { ReactElement, useState, useEffect } from 'react';
 import { Modal, ImageThumbnailWithAction } from '@/components/ui';
 import { ImageCard, Button, EmptyFile, UploadImage } from '@/components';
 import { useGetImages } from '@/hooks/images';

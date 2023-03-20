@@ -4,6 +4,7 @@ import Recipes from '@/pages/recipes/all-recipe';
 import NewRecipe from '@/pages/recipes/new-recipe';
 import EditRecipe from '@/pages/recipes/edit-recipe';
 import Categories from '@/pages/categories/all-categories';
+import NewCategory from '@/pages/categories/new-category';
 import Login from '@/pages/login';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -32,6 +33,8 @@ function App() {
                             <Route path="/recipes/new" element={<NewRecipe />} />
                             <Route path="/recipes/:slug/edit" element={<EditRecipe />} />
                             <Route path="/categories" element={<Categories />} />
+                            <Route path="/categories/new" element={<NewCategory />} />
+                            <Route path="*" element={<h1>404</h1>} />
                         </Route>
                     </Routes>
                 </Router>

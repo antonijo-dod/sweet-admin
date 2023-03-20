@@ -1,4 +1,4 @@
-import { Ingredient } from "./ingredient";
+import { Ingredient } from './ingredient';
 
 type IngredientInRecipe = {
     id: number;
@@ -32,7 +32,7 @@ type Recipe = {
     cookingTime: number;
     portions: number;
     authorId: number;
-    status: "draft" | "published";
+    status: 'draft' | 'published';
     categories: CategoryOnRecipe[];
     ingredients: IngredientInRecipe[];
 };

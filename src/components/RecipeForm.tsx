@@ -5,6 +5,7 @@ import { useForm, Controller, useFieldArray } from 'react-hook-form';
 import Select from 'react-select';
 import { useGetIngredients, useCreateIngredient } from '@/hooks/ingredients';
 import AsyncCreatableSelect from 'react-select/async-creatable';
+import { AsyncPaginate } from 'react-select-async-paginate';
 
 type TFormValues = {
     name: string;
@@ -164,12 +165,12 @@ const RecipeForm = ({ onFormSubmit, defaultData }: TRecipeFormProps): ReactEleme
                                         control={control}
                                         name="categories"
                                         render={({ field: { onChange, value, name, ref } }) => (
-                                            <Select
-                                                isMulti
-                                                name="colors"
+                                            <AsyncPaginate
                                                 ref={ref}
-                                                options={categoryOptions}
-                                                onChange={val => onChange(val.map(v => Number(v.value)))}
+                                                additional={defaultAdditional}
+                                                value={value}
+                                                loadOptions={loadPageOptions}
+                                                onChange={onChange}
                                             />
                                         )}
                                     />

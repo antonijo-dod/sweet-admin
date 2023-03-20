@@ -3,22 +3,23 @@ import { TableLayout } from '@/components';
 import { Modal } from '@/components/ui';
 import { useNavigate } from 'react-router-dom';
 import { Pagination } from '@/components/elements';
-import { useGetRecipes, useDeleteRecipe } from '@/hooks/recipes';
+import { useGetCategories, useDeleteCategory } from '@/hooks/categories';
 import { ColumnDef, getCoreRowModel, getSortedRowModel, useReactTable, getPaginationRowModel } from '@tanstack/react-table';
+import { TCategories, TCategory } from '@/types/categories';
 
-const RecipeTableContainer = (): ReactElement => {
+const CategoriesTableContainer = (): ReactElement => {
     // TODO: When delete is clicked show a modal to confirm
     const [page, setPage] = useState<number>(1);
     const [sorting, setSorting] = React.useState([]);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-    const [recipeId, setRecipeId] = useState<number | null>(null);
+    const [categoryId, setCategoryId] = useState<number | null>(null);
 
-    const recipes = useGetRecipes({ page });
-    const deleteRecipe = useDeleteRecipe();
+    const categories = useGetCategories({ page });
+    const deleteCategory = useDeleteCategory();
     const navigate = useNavigate();
 
-    const handleDeleteRecipe = async () => {
-        await deleteRecipe.mutate(recipeId, {
+    const handleDeleteCategory = async () => {
+        await deleteCategory.mutate(categoryId, {
             onSuccess: () => setIsModalOpen(false),
         });
     };
@@ -41,14 +42,14 @@ const RecipeTableContainer = (): ReactElement => {
     const ActionCell = ({ value, column, row }: { value: string; column: ColumnDef<TRecipe>; row: any }) => {
         return (
             <div className="btn-group">
-                <button className="btn btn-sm" onClick={() => navigate(`/recipes/${row.original.slug}/edit`)}>
+                <button className="btn btn-sm" onClick={() => navigate(`/categories/${row.original.slug}/edit`)}>
                     View
                 </button>
                 <button
                     className="btn btn-sm"
                     onClick={() => {
                         setIsModalOpen(true);
-                        setRecipeId(row.original.id);
+                        setCategoryId(row.original.id);
                     }}
                 >
                     Delete
@@ -57,7 +58,7 @@ const RecipeTableContainer = (): ReactElement => {
         );
     };
 
-    const columns = React.useMemo<ColumnDef<TRecipe>[]>(
+    const columns = React.useMemo<ColumnDef<TCategory>[]>(
         () => [
             {
                 accessorKey: 'id',
@@ -65,19 +66,8 @@ const RecipeTableContainer = (): ReactElement => {
                 size: 50,
             },
             {
-                accessorKey: 'thumbnail',
+                accessorKey: 'name',
                 header: 'Name',
-                className: 'bg-red-500',
-                cell: AvatarCell,
-            },
-
-            {
-                accessorKey: 'status',
-                header: 'Status',
-            },
-            {
-                accessorKey: 'isFeatured',
-                header: 'Is Featured',
             },
             {
                 accessorKey: 'actions',
@@ -88,7 +78,7 @@ const RecipeTableContainer = (): ReactElement => {
     );
 
     const table = useReactTable({
-        data: recipes.data?.data || [],
+        data: categories.data?.data || [],
         columns,
         enableRowSelection: true,
         state: {
@@ -101,13 +91,13 @@ const RecipeTableContainer = (): ReactElement => {
         debugTable: true,
     });
 
-    if (recipes.isLoading) return <div>Loading...</div>;
+    if (categories.isLoading) return <div>Loading...</div>;
 
     return (
         <>
             <TableLayout table={table} />
             <div className="mt-4">
-                <Pagination onPageChange={pageId => setPage(pageId)} pageCount={recipes.data.meta.totalPages} />
+                <Pagination onPageChange={pageId => setPage(pageId)} pageCount={categories.data.meta.totalPages} />
             </div>
             <Modal title="Delete Recipe" closeModal={() => setIsModalOpen(false)} isModalOpen={isModalOpen}>
                 <p className="py-4">Do you want to delete this recipe? This action cannot be undone.</p>
@@ -119,4 +109,4 @@ const RecipeTableContainer = (): ReactElement => {
     );
 };
 
-export default RecipeTableContainer;
+export default CategoriesTableContainer;

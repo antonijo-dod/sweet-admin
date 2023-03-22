@@ -55,11 +55,13 @@ const RecipeForm = ({ onFormSubmit, defaultData }: TRecipeFormProps): ReactEleme
   });
 
   const onSubmit = (data: TFormValues) => {
+    console.log('🚀 ~ file: RecipeForm.tsx:58 ~ onSubmit ~ data', data);
     onFormSubmit({
       ...data,
       preparingTime: Number(data.preparingTime),
       cookingTime: Number(data.cookingTime),
       portions: Number(data.portions),
+      ingredients: data.ingredients.map(ingredient => ({ id: ingredient.ingredientId, amount: ingredient.amount }))
     });
   };
 
@@ -68,7 +70,6 @@ const RecipeForm = ({ onFormSubmit, defaultData }: TRecipeFormProps): ReactEleme
       return {
         value: ingredient.id,
         label: ingredient.name,
-        id: ingredient.id,
       };
     });
 
@@ -90,7 +91,6 @@ const RecipeForm = ({ onFormSubmit, defaultData }: TRecipeFormProps): ReactEleme
     setSearchIngredients(inputValue);
     return convertIngredientsForSelect();
   };
-
 
   const loadOptions = (x, y, { currentPage }) => {
     const options = categories.data.data.map((category) => ({
@@ -310,19 +310,15 @@ const RecipeForm = ({ onFormSubmit, defaultData }: TRecipeFormProps): ReactEleme
                   <div>
                     <Controller
                       control={control}
-                      name={`ingredients.${index}.id` as const}
+                      name={`ingredients.${index}.ingredientId` as const}
                       render={({ field: { onChange, value, ref } }) => {
                         return (
                           <AsyncCreatableSelect
                             ref={ref}
                             cacheOptions
+                            defaultValue={{ value: field.ingredient?.id, label: field.ingredient?.name }}
                             className="min-w-full"
-                            defaultValue={{
-                              value: value,
-                              label: ingredients.data.data.find(ingredient => ingredient.id === value)?.name,
-                            }}
                             isLoading={ingredients.isLoading}
-                            loadOptions={e => handleLoadOptions(e)}
                             defaultOptions={convertIngredientsForSelect()}
                             onCreateOption={e => handleCreateIngredient(e)}
                             onChange={val => onChange(val.value)}
@@ -371,6 +367,7 @@ const RecipeForm = ({ onFormSubmit, defaultData }: TRecipeFormProps): ReactEleme
               onClick={() => {
                 ingredientsAppend({
                   id: 0,
+                  ingredientId: 0,
                   amount: '',
                 });
               }}

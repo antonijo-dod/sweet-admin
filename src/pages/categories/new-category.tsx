@@ -1,7 +1,7 @@
 import { Fragment, ReactElement, useState } from 'react';
 import { PageHeading } from '@/components/ui';
 import { Button } from '@/components';
-import { NewCategoryForm } from '@/containers';
+import { CategoryForm } from '@/containers';
 
 const NewCategory = (): ReactElement => {
     return (
@@ -20,7 +20,7 @@ const NewCategory = (): ReactElement => {
                 />
             </div>
             <div className="p-8 ml-8 mr-8 bg-white">
-                <NewCategoryForm />
+                <CategoryForm />
             </div>
         </Fragment>
     );

@@ -15,9 +15,11 @@ const RecipeHeaderContainer = (): ReactElement => {
       status: 'published'
     })
   }
-
   const handleUnpublishRecipe = () => {
-
+    updateRecipeStatus.mutate({
+      recipeId: recipe.data.data.id,
+      status: 'draft'
+    })
   }
 
   if (recipe.isLoading) return <div>Loading</div>

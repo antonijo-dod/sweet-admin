@@ -10,7 +10,7 @@ export const useUpdateRecipeStatus = () => {
   const queryClient = useQueryClient()
 
   const putRecipeStatus = async (data: TRecipeStatus) => {
-    const response = await sweetServer.put(`/ recipes / ${data.recipeId} /status`, data.status)
+    const response = await sweetServer.put(`/recipes/${data.recipeId}/status`, data)
     return response.data
   }
 
